@@ -6,9 +6,18 @@ from sklearn.linear_model import LogisticRegression
 import numpy as np
 import pickle
 
+
 datadir = '/ocean/projects/mth200005p/jleiner/hrt-factor/data/'
 modeldir = '/ocean/projects/mth200005p/jleiner/hrt-factor/models/Predictive Models/'
 
+# Parse command line arguments
+# Y_target - Index of target feature in the Y dataset
+# mask_p - Probability of masking (portion of data to be masked)
+# niter_mask - Number of iterations for generating masks
+# hidden_layers - Hidden layers for MLP models
+# split_size - Amount of data to be used for training (can be 1.0 when using GCM test statistic)
+# num_X_mask - First X columns will be excluded from coniditoning if used. -1 indicates all X's will be used as features
+# label - Dataset name
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--Y_target',type=int,default =0)
 parser.add_argument('--mask_p',type=float,default =0.2)
@@ -48,6 +57,9 @@ masks = np.reshape(masks,[train_int*niter_mask, num_S2])
 masks[:,Y_target]= 0 
 ints = np.random.choice(train_int, size=niter_mask*train_int, replace=True)
 
+
+
+#base case
 if(num_X_mask < 1):
     Y_train = 2*Y_train -1
     X_train = 2*X_train -1
@@ -60,6 +72,8 @@ if(num_X_mask < 1):
     feat = np.hstack((X_train==-1,X_train == 1,Y_train[ints,:]*masks == -1,Y_train[ints,:]*masks == 1))
     outputs = Y_train[ints,Y_target]
 
+
+#only needed if excluding some X features from consideration
 else:
     Y_train = 2*Y_train -1
     X_genes = 2*X_train[:,:num_X_mask] -1

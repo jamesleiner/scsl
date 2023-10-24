@@ -40,10 +40,10 @@ from sklearn.linear_model import LogisticRegression
 import numpy as np
 import pickle
 
-datadir = '/ocean/projects/mth200005p/jleiner/hrt-factor/data/'
-modeldir = '/ocean/projects/mth200005p/jleiner/hrt-factor/models/'
+datadir = 'data/'
+modeldir = 'models/'
 
-
+# define MLP model
 class BigNet(nn.Module):
     def __init__(self, n_inputs):
         super(BigNet,self).__init__()
@@ -66,6 +66,8 @@ class BigNet(nn.Module):
         # Third hidden layer
         return torch.sigmoid(x)
 
+    
+# mask datasets
 def create_masked_data_X(X,Y,X_target,prob_mask = 0.2):
     yinds = torch.distributions.bernoulli.Bernoulli(probs=torch.tensor([prob_mask])).sample([Y.shape[1]])
     yinds = torch.nonzero(yinds.view(-1)) 
@@ -78,6 +80,13 @@ def create_masked_data_X(X,Y,X_target,prob_mask = 0.2):
     return(torch.cat((X_nn.bool(),Y_nn == -1, Y_nn==1), 1).float())
 
 
+# Parse command line arguments
+# X_target - Index of target feature in the X dataset
+# label - name of dataset
+# NUM_EPOCHS - number of epochs to train
+# BATCH_SIZE - batch size for training neural net
+# PROB_MASK - probability of masking variable during model training
+# LR - learning rate
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--X_target',type=int,default =0)
 parser.add_argument('--label',type=str,default = "synth")
@@ -95,6 +104,7 @@ PROB_MASK = args.PROB_MASK
 LR = args.LR
 
 
+#train model 
 def train_model(model,X,Y,target,NUM_EPOCHS = 200, BATCH_SIZE = 50, PROB_MASK = 0.2, LR = 1e-2,filesave="model.pkl",type="X"):
     criterion = torch.nn.BCELoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=LR)
@@ -128,7 +138,7 @@ y_ds = label + '_y.npy'
 X = torch.from_numpy(np.load(datadir + x_ds))
 Y = torch.from_numpy(np.load(datadir + y_ds))
 
-
+#save datset
 train_dataset = TensorDataset(X,Y)
 train_loader = DataLoader(train_dataset, batch_size=50, shuffle=True)
 criterion = torch.nn.BCELoss()

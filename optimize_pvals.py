@@ -1,3 +1,21 @@
+'''
+optimize p_vals: Given already trained models (either logistic or MLP), this script searches for the conditioning subset which will generate the highest p-value. 
+
+Expected command line arguments:
+
+- X_target: Column of X matrix to consider in testing for edge
+- Y_target: Coluimn of Y matrix to consider in testing for edge
+- NUM_EPOCHS: Number of epochs to search for highest p-value
+- stop_pval: P-value to use for early stopping rule
+- stop_train: Number of epochs to train model prior to using hybrid search approach
+- model_type: Either mlp or logit
+- label: Dataset name
+- search_type: Will exhaustively search over all subsets if True (recommended False)
+- start_X_primary: Only use if there are indicators to be included in all models. Default to -1
+- subset_primary: Only use if there is a subsetting criterion to restrict the dataset to 
+- learning_r: Learning rate to use in optimization
+'''
+
 import pandas as pd
 import numpy as np
 import numpy.random as rn

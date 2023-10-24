@@ -85,6 +85,14 @@ def create_masked_data_Y(X,Y,Y_target,prob_mask = 0.2):
     return(torch.cat((X_nn==-1,X_nn==1,Y_nn == -1, Y_nn==1), 1).float())
 
 
+# Parse command line arguments
+# X_target - Index of target feature in the X dataset
+# label - name of dataset
+# NUM_EPOCHS - number of epochs to train
+# BATCH_SIZE - batch size for training neural net
+# PROB_MASK - probability of masking variable during model training
+# LR - learning rate
+# num_X_mask - index of X values below which will be excluded (default -1 indicates all features considered)
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--Y_target',type=int,default =0)
@@ -104,36 +112,9 @@ PROB_MASK = args.PROB_MASK
 LR = args.LR
 num_X_mask = args.num_X_mask
 
-def train_model(model,X,Y,target,NUM_EPOCHS = 200, BATCH_SIZE = 50, PROB_MASK = 0.2, LR = 1e-2,filesave="model.pkl",type="X"):
-    criterion = torch.nn.BCELoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=LR)
-    train_losses = []
-    for epoch in range(NUM_EPOCHS):
-        model.train()
-        this_losses = []
-        for batch_x, batch_y in train_loader:
-            optimizer.zero_grad()
-            if(type == "X"):
-                inputs = create_masked_data_X(batch_x,batch_y,target,prob_mask = PROB_MASK)
-            else:
-                inputs = create_masked_data_Y(batch_x,batch_y,target,prob_mask = PROB_MASK)
-            logits = model(inputs)
-
-            # calculate loss.
-            if(type == "X"):
-                loss = criterion(logits.view(-1), batch_x[:,target].float())
-            else:
-                loss = criterion(logits.view(-1), batch_y[:,target].float())
-            # autograd backward pass (calculates derivatives using backprop).
-            loss.backward()
-            # take SGD step (updates model weights).
-            optimizer.step()
-            this_losses.append(float(loss))
-        train_losses.append(np.mean(this_losses))
-    return train_losses
 
 
-
+#create masked data
 def create_masked_data_Y(X,Y,Y_target,prob_mask = 0.2,num_X_mask =47):
     yinds = torch.distributions.bernoulli.Bernoulli(probs=torch.tensor([prob_mask])).sample([Y.shape[1]])
     yinds = torch.nonzero(yinds.view(-1)) 
@@ -159,7 +140,7 @@ def create_masked_data_Y(X,Y,Y_target,prob_mask = 0.2,num_X_mask =47):
 
     return feats
 
-
+#train model
 def train_model(model,X,Y,target,NUM_EPOCHS = 200, BATCH_SIZE = 50, PROB_MASK = 0.2, LR = 1e-2,filesave="model.pkl",type="X",num_X_mask = -1):
     criterion = torch.nn.BCELoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=LR)
