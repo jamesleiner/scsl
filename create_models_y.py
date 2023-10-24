@@ -7,8 +7,8 @@ import numpy as np
 import pickle
 
 
-datadir = '/ocean/projects/mth200005p/jleiner/hrt-factor/data/'
-modeldir = '/ocean/projects/mth200005p/jleiner/hrt-factor/models/Predictive Models/'
+datadir = 'data/'
+modeldir = 'models/Predictive Models/'
 
 # Parse command line arguments
 # Y_target - Index of target feature in the Y dataset

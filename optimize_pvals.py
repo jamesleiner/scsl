@@ -299,9 +299,9 @@ def str2bool(v):
 warnings.filterwarnings("ignore")
 
 
-resdir = '/ocean/projects/mth200005p/jleiner/hrt-factor/results/'
-datadir = '/ocean/projects/mth200005p/jleiner/hrt-factor/data/'
-modeldir = '/ocean/projects/mth200005p/jleiner/hrt-factor/models/'
+resdir = 'results/'
+datadir = 'data/'
+modeldir = 'models/'
 
 parser = argparse.ArgumentParser(description='parameters for pvalue search.')
 parser.add_argument('--X_target',type=int,default =0)

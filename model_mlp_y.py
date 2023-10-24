@@ -32,8 +32,8 @@ from tqdm import tqdm, trange
 import time
 warnings.filterwarnings("ignore")
 
-datadir = '/ocean/projects/mth200005p/jleiner/hrt-factor/data/'
-modeldir = '/ocean/projects/mth200005p/jleiner/hrt-factor/models/'
+datadir = 'data/'
+modeldir = 'models/'
 
 
 class BigNet(nn.Module):
