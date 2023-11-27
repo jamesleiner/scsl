@@ -1,0 +1,50 @@
+#!/bin/bash
+#SBATCH -p RM-shared
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 36:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --array=1-1000
+VAR=$((SLURM_ARRAY_TASK_ID))
+echo $VAR
+
+VARIABLE=$(head -"$VAR" bash/params_actual.txt | tail -1)
+echo $VARIABLE
+stringarray=($VARIABLE)
+
+module load python
+module load anaconda3
+conda activate hrt-funs
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Bladder
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Bladder
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Breast
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Breast
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Colon
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Colon
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Liver
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Liver
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Lung
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Lung
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Ovary
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Ovary
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Pancreas
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Pancreas
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Prostate
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Prostate
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Rectum
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Rectum
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Skin
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Skin
+
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type logit --start_X_primary 47 --subset_primary Uterus
+python optimize_pvals4.py --label  ${stringarray[0]} --X_target ${stringarray[1]} --Y_target ${stringarray[2]}  --NUM_EPOCHS 1000 --stop_pval 0.5 --model_type mlp --start_X_primary 47 --subset_primary Uterus

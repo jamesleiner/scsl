@@ -1,0 +1,20 @@
+#!/bin/bash
+#SBATCH -p RM-shared
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 36:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --array=1-30
+VAR=$((SLURM_ARRAY_TASK_ID))
+echo $VAR
+
+VARIABLE=$(head -"$VAR" bash/datasets.txt | tail -1)
+echo $VARIABLE
+stringarray=($VARIABLE)
+
+module load python
+module load anaconda3
+conda activate hrt-funs
+cd /jet/home/jleiner/work/py-tetrad/pytetrad
+python run_benchmarks.py --dataset  ${stringarray[0]} --method fci
+
