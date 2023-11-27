@@ -79,7 +79,7 @@ sbatch batch_gcm_gso_primary_subset
 ```
 
 ### Compile Results
-
+To generate the experimental results and figures in the papers, the Jupyter Notebook 'Compile Results.ipynb' recreates the figures in the paper from the experimental results. 
 
 
 
