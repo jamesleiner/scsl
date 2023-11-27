@@ -41,8 +41,42 @@ Here, stop_pval refers to the $p$-value to use for an early stopping rule and NU
 ## Instructions for Replicating Figures 
 There are three steps required to recreate figures: recreate the semi-synthetic datasets, run the proceure using the instructions above, and then compling the results. Detailed below are instructions for each step:
 ### Creating Semi-Synthetic Datasets
+The following raw data files are contained in the data folder. The source is [Genomic characterization of metastatic patterns from prospective clinical sequencing of 25,000 patients](https://zenodo.org/records/5801902).
+* missing_gene_alteration_matrix.csv: For each patient, indicates wheter a mutation is present at each location.
+* metastasis_bysamples.csv: For each patient, indicate whether a secondary metastsis is present at each body location. 
+* primary_sites.csv: Primary site location for each patient.
+
+The Jupyter Notebook *Create Datasets.ipynb" merges these datasets and creates the semi-synthetic datasets based off of the above. All semi-syntehtic datasets are pre-saved in the data folder as well to aid in replicability. 
 
 ### Running SCSL in server environment
+After creating the semi-synthetic datasets, the next steps are to create the predictive models and then optimize the $p$-values using the instructions above. To do this efficiently, we execute the code in a server environment. 
+
+To build the predictive models, we can run the following scripts in a bash server environment:
+```
+sbatch batch_model_x
+sbatch batch_model_y
+sbatch batch_model_x_actual
+sbatch batch_model_y_actual
+```
+This will require a significant amount of compute resource and the user may wish to modify the text files *params_actual.txt*, *params_x,txt*, and *params_y.txt* so only a specific dataset of interest has predictive models built for it.
+
+After building predictive models, we can then compute the $p$-values in batch as:
+```
+sbatch batch_gcm_gso
+sbatch batch_gcm_gso_primary_subset
+```
+### Creating Benchmarks 
+In addition to running SCSL, we benchmark this to comparison methods. As before, we assume that the pytetrad environment has been installed. 
+
+* run_benchmarks.py runs through different methodologies used in pytetrad for a choice of dataset.
+* run_pcalgo.py is a custom implementation of the PC algorithm that is designed to work with the GCM conditional independence tests used in this project
+* run_pcalgo_cont.py is a custom implementation of the above but also is designed to be used for continuous data only.
+
+To run these in batch, we can execute the following scripts:
+```
+sbatch batch_gcm_gso
+sbatch batch_gcm_gso_primary_subset
+```
 
 ### Compile Results
 
